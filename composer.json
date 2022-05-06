@@ -1,0 +1,23 @@
+{
+    "name": "ronaldochelone/crud-php-mysql-api",
+    "description": "CRUD - PHP, MYSQL sem Frameworks com comunicação via API.",
+    "authors": [
+        {
+            "name": "Ronaldo Chelone",
+            "email": "ronaldo_chelone@yahoo.com.br"
+        }
+    ],
+    "license": "stable",
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        },
+        "files": [
+            "config.php"
+        ]
+    },
+    "require": {}
+}
