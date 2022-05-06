@@ -1,0 +1,9 @@
+
+
+#Options +FollowSymlinks
+#RewriteCond %{HTTP_HOST} crud.local
+#RewriteCond %{REQUEST_URI} !public_html/
+
+RewriteEngine On
+RewriteBase /
+RewriteRule ^(.*)$ public_html/$1 [L]
