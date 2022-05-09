@@ -7,6 +7,7 @@ use App\Models\UserModel;
 class User
 {
     private $userModel;
+    private $requiredFields = ['nome','email','data_nascimento','telefone','cpf','cep'];
 
     public function __construct()
     {
@@ -35,21 +36,23 @@ class User
     /**
      * Grava as informções do Usuário
      *
-     * @return void
+     * @return string // Mensagem de Sucesso ou Erro
      */
-    public function post()
+    public function post(): string
     {
+
         $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
+
+        // Verifica se os campos requiridos estão present.
+        foreach ($this->requiredFields as $key => $value) {
+            if (!isset($_POST[$value]) || empty($_POST[$value])) {
+                throw new \Exception("Error: É necessário enviar os todos dados para inserir o usuário", 1);
+            }
+        }
 
         $rs = $this->userModel->insert($_POST);
 
-        if ($rs > 0) {
-            return 'Usuário inserido com Sucesso';
-        } else {
-            return $rs;//throw new \Exception("Error ao inserir o usuário", 1);
-        }
-
-        return $_POST;
+        return ($rs > 0) ? 'Usuário inserido com Sucesso' : $rs;
     }
 
     public function put()

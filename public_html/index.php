@@ -2,7 +2,6 @@
 
 namespace App;
 
-header('Content-Type: application/json');
 require_once('../vendor/autoload.php');
 
 $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -11,11 +10,13 @@ if ($url) {
     $url = explode('/', $url);
 
     if (strtolower($url[0]) === 'api') {
+        // Modificando o cabeçalho para JSON
+        header('Content-Type: application/json');
+
         if (count($url) < 2) {
             echo json_encode(['status' => false,'data' => 'Não foi possível localizar a class selecionada'], JSON_UNESCAPED_UNICODE);
                 exit;
         }
-
 
         array_shift($url);
 
@@ -75,5 +76,5 @@ if ($url) {
         }
     }
 } else {
-    echo 'Controle padrão';
+    echo '<h1>Controle padrão</h1>';
 }

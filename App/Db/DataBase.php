@@ -69,7 +69,6 @@ class DataBase
                 }
             }
 
-
             $stmt->execute();
 
             $rs = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -80,11 +79,11 @@ class DataBase
     }
 
     /**
-     * Undocumented function
+     * Realiza a inserção das Entidades
      *
      * @param string|null $table
      * @param array|null $data
-     * @return int| numero do registro inserido
+     * @return integer| numero do registro inserido
      *
      */
     public function insert(string $table = null, array $data = null): int
@@ -94,23 +93,22 @@ class DataBase
             exit;
         }
 
+        if (!is_array($data)) {
+            throw new \Exception("Error: É necessário informar os dados para serem inseridos.", 1);
+            exit;
+        }
+
         try {
-            $sql = "INSERT INTO " . $table;
-            $sql .= " ( " . implode(',', array_keys($data)) . " )";
-            $sql .= " VALUES ( ";
+            $dataFieds  = array_keys($data);
+            $dataValues = array_values($data);
+            $binds      = array_pad([], count($dataValues), '?');
 
-
-            foreach ($data as $key => $value) {
-                $sql .= '?,';
-            }
-
-            $sql = substr($sql, 0, -1);
-
-            $sql .= ")";
+            $sql = "INSERT INTO " . $table . " ( " . implode(',', $dataFieds) . " ) " . " VALUES ( " . implode(',', $binds) . " )";
 
             $stmt = $this->con->prepare($sql);
+
             $stmt->execute(array_values($data));
-            return ($stmt->rowCount() > 0) ? $stmt->lastInsertId() : -1;
+            return $this->con->lastInsertId();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
