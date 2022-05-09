@@ -14,7 +14,7 @@ class User
     }
 
     /**
-     * Get User
+     * Lista as informações de um ou mais usuários
      *
      * @param integer|null $id
      * @return array
@@ -32,9 +32,24 @@ class User
         return $this->userModel->get($fields, $where);
     }
 
+    /**
+     * Grava as informções do Usuário
+     *
+     * @return void
+     */
     public function post()
     {
-        echo __FUNCTION__;
+        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
+
+        $rs = $this->userModel->insert($_POST);
+
+        if ($rs > 0) {
+            return 'Usuário inserido com Sucesso';
+        } else {
+            return $rs;//throw new \Exception("Error ao inserir o usuário", 1);
+        }
+
+        return $_POST;
     }
 
     public function put()

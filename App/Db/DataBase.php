@@ -16,7 +16,7 @@ class DataBase
     }
 
     /**
-     * Undocumented function
+     * Realliza Consultas nas Entidades do Sistema
      *
      * @param string $table
      * @param string|array $fields
@@ -79,8 +79,41 @@ class DataBase
         }
     }
 
-    public function insert(string $table = null, array $data = null)
+    /**
+     * Undocumented function
+     *
+     * @param string|null $table
+     * @param array|null $data
+     * @return int| numero do registro inserido
+     *
+     */
+    public function insert(string $table = null, array $data = null): int
     {
+        if (!$table) {
+            throw new \Exception("Error: É necessário informar a tabela.", 1);
+            exit;
+        }
+
+        try {
+            $sql = "INSERT INTO " . $table;
+            $sql .= " ( " . implode(',', array_keys($data)) . " )";
+            $sql .= " VALUES ( ";
+
+
+            foreach ($data as $key => $value) {
+                $sql .= '?,';
+            }
+
+            $sql = substr($sql, 0, -1);
+
+            $sql .= ")";
+
+            $stmt = $this->con->prepare($sql);
+            $stmt->execute(array_values($data));
+            return ($stmt->rowCount() > 0) ? $stmt->lastInsertId() : -1;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function update(string $table = null, array $condition = null)
