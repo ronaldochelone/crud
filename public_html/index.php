@@ -11,6 +11,12 @@ if ($url) {
     $url = explode('/', $url);
 
     if (strtolower($url[0]) === 'api') {
+        if (count($url) < 2) {
+            echo json_encode(['status' => false,'data' => 'Não foi possível localizar a class selecionada'], JSON_UNESCAPED_UNICODE);
+                exit;
+        }
+
+
         array_shift($url);
 
         $controller = $url[0];
@@ -68,4 +74,6 @@ if ($url) {
             exit;
         }
     }
+} else {
+    echo 'Controle padrão';
 }
