@@ -58,7 +58,6 @@ onde iremos enviar -lo a  API
  [] Desenvolvolver o Método POST
  [] Desenvolvolver o Método PUT
  [] Desenvolvolver o Método DELETE
-
  [] Criar autenticação via Token
  [] Criar Testes 
 
