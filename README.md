@@ -2,6 +2,9 @@
 
 
 <h2 style="color:#393c3f">  CRUD - PHP, MYSQL sem Frameworks com comunicação via API. </h2>
+
+<h3 style="color:#393c3f"> Objetivo </h3>
+
 - O objetivo deste projeto é demostrar a criação de CRUD simples em PHP e Mysql sem a necessidade de frameworks.
 
  - Iremos desenvolver uma  API REST para comunicação de um formulário. 
@@ -15,14 +18,44 @@
 [PUT] https://localhost:8000/user/:id
 [DELETE] https://localhost:8000/user/:id
 ```
+
+<h3 style="color:#393c3f"> Requisitos </h3>
+
+ - PHP 7+ 
+ - MySQL
+ - INSOMINIA OU POSTMAN
+
+<h3 style="color:#393c3f"> Como executar </h3> 
+
+ - Importar o arquivo crud.sql da pasta ***SQL*** com a ferramenta de gerenciamento de Banco de Dados de sua preferencia.
+
+-  Iniciar o PHP 
+-  Iniciar o Mysql
+-  Executa: ***composer update***
+- Atualizar os dados no arquivo ***Config.php***
+        
+        const DBDRIVE = 'mysql';
+        const DBHOST = 'localhost';
+        const DBNAME = 'crud';
+        const DBUSER = 'root';
+        const DBPASS = '';
+
+Acessar o programa pela url do navegador: 
+
+[localhost/api/user:8000](http://localhost/api/user:8000)
+
+
 <h3 style="color:#393c3f"> Cadastro de usuário </h3>
+
 - O cadastro será um formulário HTML estilizado com [bootstrap](https://getbootstrap.com/) 
 onde iremos enviar -lo a  API
 
 <h3 style="color:#393c3f"> Comunicação </h3>
+
 - A API é implementada utilizando das especificações REST e aceita os formatos **json** e **multipart/form-data**
 
 <h3 style="color:#393c3f"> Comunicação Externa </h3>
+ 
  - O formulário de cadastro irá se comunicar com a API do [ViaCEP](https://viacep.com.br/) para obtenção dos dados de endereço, através de uma consulta pelo CEP.
 
 
@@ -30,32 +63,32 @@ onde iremos enviar -lo a  API
 
 <h4 style="color:#393c3f"> Tabela - User </h4>
 
-- name       ***( nome )***
-- email      ***( e-mail )***
-- birthday   ***( Data de Aniversário )***
-- phone      ***( Telefone )***
-- created_at  ***( Data do cadastro )***
-- updated_at  ***( Data da atualização )***
+- nome       ***( nome )***
+- email      ***( email )***
+- Data de Aniversário   ***( data_nascimento )***
+- Telefone      ***( telefone )***
+- Data do cadastro  ***( created_at )***
+- Data da atualização  ***( updated_at )***
 
 <h4 style="color:#393c3f"> Tabela - Addresses</h4>
 
-- street      ***( rua )***
-- number      ***( número )***
-- district    ***( Bairro )***
-- complement  ***( Complemento )***
-- states      ***( estado )***
-- city        ***( Cidade )***
-- post_code   ***( CEP )***
-- country`    ***( País )***
-- created_at  ***( Data do cadastro )***
-- updated_at  ***( Data da atualização )***
+- rua      ***( rua )***
+- número      ***( numero )***
+- Bairro    ***( bairro )***
+- Complemento  ***( complemento )***
+- estado      ***( estado )***
+- cidade        ***( cidade )***
+- CEP   ***( CEP )***
+- pais`    ***( País )***
+- Data do cadastro  ***( created_at )***
+- Data da atualização  ***( updated_at )***
 
 <h3 style="color:#393c3f">Features</h3>
 
 <h4 style="color:#393c3f"> API</h4>
 
  [x] Desenvolvolver o Método GET
- [] Desenvolvolver o Método POST
+ [x] Desenvolvolver o Método POST
  [] Desenvolvolver o Método PUT
  [] Desenvolvolver o Método DELETE
  [] Criar autenticação via Token
