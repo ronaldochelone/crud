@@ -57,8 +57,6 @@ class User
     public function put($id = null): string
     {
 
-        $_REQUEST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
-
         if ($id == null) {
             throw new \Exception("Error: É necessário o id do usuário a ser atualizado", 1);
         }
@@ -70,19 +68,13 @@ class User
             throw new \Exception("Error: Não foi possível localizar o usuário", 1);
         }
 
+        // É possível passar mais de um parâmetro para a atualização do registro.
+        $where = [
+            ['id' => $id],
+            //['nome' => 'fulano']
+        ];
 
-
-
-        $data = $_POST;
-        $where = ['id' => $id];
-
-        $rs = $this->userModel->update($data, $where);
-
+        $rs = $this->userModel->update($_POST, $where);
         return ($rs > 0) ? 'Usuário atualizado com Sucesso' : 'Não foi possível atualizar o usuário';
-    }
-
-    public function delete()
-    {
-        echo __FUNCTION__;
     }
 }

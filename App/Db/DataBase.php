@@ -121,7 +121,15 @@ class DataBase
         }
     }
 
-    public function update(string $table = null, array $data = null, array $where = null)
+    /**
+     * Realiza a atualização das Entidades
+     *
+     * @param string|null $table
+     * @param array|null $data
+     * @param array|null $where
+     * @return integer
+     */
+    public function update(string $table = null, array $data = null, array $where = null): int
     {
         if (!$table) {
             throw new \Exception("Error: É necessário informar a tabela.", 1);
@@ -141,46 +149,35 @@ class DataBase
         try {
             $dataFieds  = array_keys($data);
             $dataValues = array_values($data);
-            //$binds      = array_pad([], count($dataValues), '?');
 
+            $sql = "UPDATE " . $table . ' SET ';
 
-            $sql = "UPDATE" . $table;
-
-            /*
-            // Bind Value In SQL String
-            if ($where) {
-                foreach ($where as $value) {
-                    if (is_array($value)) {
-                        foreach ($value as $key => $valueParameter) {
-                            $bindKey = ':' . $key;
-                            $bindValue = $valueParameter;
-                            $stmt->bindValue($bindKey, $bindValue);
-                        }
-                    }
-                }
-            }
-            */
-
-
-            /*
-            // Builder Where
             foreach ($dataFieds as $key => $value) {
-                foreach ($value as $keyParameter => $parametFilter) {
-                    $sql .= $keyParameter . ' = :' . $keyParameter;
+                $sql .= $value . ' = "' . htmlspecialchars(addslashes($dataValues[$key])) . '",';
+            }
+
+            $sql = substr($sql, 0, -1);
+
+            if ($where) {
+                $sql .= " WHERE ";
+                $contParameter = 0;
+                foreach ($where as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $keyParameter => $parametFilter) {
+                            $sql .= $keyParameter . ' = "' . htmlspecialchars(addslashes($parametFilter)) . '"';
+                            $sql .= ($contParameter < (count($where) - 1)) ? " AND " : "";
+                            $contParameter++;
+                        }
+                    } else {
+                        $sql .= $key . ' = "' . htmlspecialchars(addslashes($value)) . '"';
+                    }
                 }
             }
 
             $stmt = $this->con->prepare($sql);
-
-            echo $stmt->queryString;
-            */
-           // $stmt->execute(array_values($data));
-        } catch (\Throwable $e) {
-            return $e->getMessage();
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode());
         }
-    }
-
-    public function delete(string $table = null, array $condition = null)
-    {
     }
 }
