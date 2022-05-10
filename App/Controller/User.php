@@ -25,7 +25,6 @@ class User
         $fields = null;
 
         $where = ($id != null) ? [
-                                    //['nome' => 'Fulano'], Caso Precise de mais alguns filtro no GET
                                     ['id' => $id]
                                 ] : null;
 
@@ -55,9 +54,31 @@ class User
         return ($rs > 0) ? 'Usuário inserido com Sucesso' : $rs;
     }
 
-    public function put()
+    public function put($id = null): string
     {
-        echo __FUNCTION__;
+
+        $_REQUEST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
+
+        if ($id == null) {
+            throw new \Exception("Error: É necessário o id do usuário a ser atualizado", 1);
+        }
+
+        //Verifica se o usuário existe.
+        $rs = $this->userModel->get(null, ['id' => $id]);
+
+        if (!$rs) {
+            throw new \Exception("Error: Não foi possível localizar o usuário", 1);
+        }
+
+
+
+
+        $data = $_POST;
+        $where = ['id' => $id];
+
+        $rs = $this->userModel->update($data, $where);
+
+        return ($rs > 0) ? 'Usuário atualizado com Sucesso' : 'Não foi possível atualizar o usuário';
     }
 
     public function delete()
