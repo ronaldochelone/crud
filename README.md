@@ -27,7 +27,7 @@
 
 <h3 style="color:#393c3f"> Como executar </h3> 
 
- - Importar o arquivo crud.sql da pasta ***SQL*** com a ferramenta de gerenciamento de Banco de Dados de sua preferencia.
+ - Importar o arquivo crud.sql da pasta ***SQL*** com a ferramenta de gerenciamento de Banco de Dados de sua preferência.
 
 -  Iniciar o PHP 
 -  Iniciar o Mysql
@@ -42,7 +42,7 @@
 
 Acessar o programa pela url do navegador: 
 
-[localhost/api/user:8000](http://localhost/api/user:8000)
+[https://localhost/user](https://localhost:8000/user)
 
 
 <h3 style="color:#393c3f"> Cadastro de usuário </h3>
