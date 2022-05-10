@@ -15,7 +15,7 @@ class BaseModel
     }
 
     /**
-     * Pesquisa as Entidades do Sistema
+     * Pesquisa as Entidades do Sistema.
      *
      * @param [type] $id
      * @return array
@@ -27,7 +27,7 @@ class BaseModel
     }
 
      /**
-     * Inseri dados nas Entidades do Sistema
+     * Inseri dados nas Entidades do Sistema.
      *
      * @param [type] $data
      * @return int
@@ -35,5 +35,17 @@ class BaseModel
     public function insert(array $data = null): int
     {
         return $this->db->insert($this->table, $data);
+    }
+
+    /**
+     * Atualiza os dados das Entidades do Sistema.
+     *
+     * @param array|null $data
+     * @param array|null $where
+     * @return integer
+     */
+    public function update(array $data = null, array $where = null): int
+    {
+        return $this->db->update($this->table, $data, $where);
     }
 }
