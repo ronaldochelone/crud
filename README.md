@@ -89,7 +89,7 @@ onde iremos enviar -lo a  API
 
  [x] Desenvolvolver o Método GET
  [x] Desenvolvolver o Método POST
- [] Desenvolvolver o Método PUT
+ [x] Desenvolvolver o Método PUT
  [] Desenvolvolver o Método DELETE
  [] Criar autenticação via Token
  [] Criar Testes 
