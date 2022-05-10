@@ -77,4 +77,28 @@ class User
         $rs = $this->userModel->update($_POST, $where);
         return ($rs > 0) ? 'Usuário atualizado com Sucesso' : 'Não foi possível atualizar o usuário';
     }
+
+    public function delete($id = null): string
+    {
+
+        if ($id == null) {
+            throw new \Exception("Error: É necessário o id do usuário a ser deletado", 1);
+        }
+
+        //Verifica se o usuário existe.
+        $rs = $this->userModel->get(null, ['id' => $id]);
+
+        if (!$rs) {
+            throw new \Exception("Error: Não foi possível localizar o usuário a ser deletado", 1);
+        }
+
+        // É possível passar mais de um parâmetro para a remoção do registro.
+        $where = [
+           ['id' => $id],
+           //['nome' => 'fulano']
+        ];
+
+        $rs = $this->userModel->delete($where);
+        return ($rs > 0) ? 'Usuário deletado com Sucesso' : 'Não foi possível remover o usuário';
+    }
 }

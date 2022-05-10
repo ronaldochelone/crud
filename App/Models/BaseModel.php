@@ -48,4 +48,10 @@ class BaseModel
     {
         return $this->db->update($this->table, $data, $where);
     }
+
+
+    public function delete(array $where = null)
+    {
+        return $this->db->delete($this->table, $where);
+    }
 }

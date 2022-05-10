@@ -180,4 +180,62 @@ class DataBase
             throw new \PDOException($e->getMessage(), (int)$e->getCode());
         }
     }
+
+
+    /**
+     * Remove um registro da Entidade
+     *
+     * @param string|null $table
+     * @param array|null $where
+     * @return integer
+     */
+    public function delete(string $table = null, array $where = null): int
+    {
+        if (!$table) {
+            throw new \Exception("Error: É necessário informar a tabela.", 1);
+            exit;
+        }
+
+/*
+        try {
+            $sql = "DELETE " . $table . ' SET ';
+
+            foreach ($dataFieds as $key => $value) {
+                $sql .= $value . ' = "' . htmlspecialchars(addslashes($dataValues[$key])) . '",';
+            }
+
+            $sql = substr($sql, 0, -1);
+
+            if ($where) {
+                $sql .= " WHERE ";
+                $contParameter = 0;
+                foreach ($where as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $keyParameter => $parametFilter) {
+                            $sql .= $keyParameter . ' = "' . htmlspecialchars(addslashes($parametFilter)) . '"';
+                            $sql .= ($contParameter < (count($where) - 1)) ? " AND " : "";
+                            $contParameter++;
+                        }
+                    } else {
+                        $sql .= $key . ' = "' . htmlspecialchars(addslashes($value)) . '"';
+                    }
+                }
+            }
+
+            $stmt = $this->con->prepare($sql);
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode());
+        }
+
+
+
+        $sql = "DELETE FROM users WHERE id=?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        */
+
+
+        return 1;
+    }
 }
