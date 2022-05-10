@@ -42,7 +42,7 @@
 
 Acessar o programa pela url do navegador: 
 
-[https://localhost/user](https://localhost:8000/user)
+[http://localhost/user](http://localhost:8000/user)
 
 
 <h3 style="color:#393c3f"> Cadastro de usuário </h3>
