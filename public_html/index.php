@@ -2,6 +2,21 @@
 
 namespace App;
 
+// Evitar cros no apache2 //
+$method_xsff = $_SERVER['REQUEST_METHOD'];
+if ($method_xsff == "OPTIONS") {
+    header('Access-Control-Allow-Origin: *');
+    header("Access-Control-Allow-Headers: *");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+    die();
+} else {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Headers: *');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+}
+
+
+
 require_once('../vendor/autoload.php');
 
 $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -53,12 +68,14 @@ if ($url) {
         $className = __NAMESPACE__ . '\\Controller\\' . ucwords($controller);
 
         try {
+            // Verifica se a entidade chamada existe
             if (!class_exists($className)) {
                 http_response_code(404);
                 echo json_encode(['status' => false,'data' => 'Não foi possível localizar a class selecionada'], JSON_UNESCAPED_UNICODE);
                 exit;
             }
 
+            // Verifica se o metodo chamado existe
             if (!method_exists($className, $method)) {
                 http_response_code(404);
                 echo json_encode(['status' => false,'data' => 'Não foi possível localizar o método selecionado'], JSON_UNESCAPED_UNICODE);
