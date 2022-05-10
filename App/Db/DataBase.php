@@ -41,7 +41,6 @@ class DataBase
             if ($where) {
                 $sql .= " WHERE ";
                 $contParameter = 0;
-
                 foreach ($where as $key => $value) {
                     if (is_array($value)) {
                         foreach ($value as $keyParameter => $parametFilter) {
@@ -50,28 +49,37 @@ class DataBase
 
                             $contParameter++;
                         }
+                    } else {
+                        $sql .= $key . ' = :' . $key;
                     }
                 }
             }
 
             $stmt = $this->con->prepare($sql);
 
+
             // Bind Value In SQL String
             if ($where) {
-                foreach ($where as $value) {
+                foreach ($where as $keyValue => $value) {
                     if (is_array($value)) {
                         foreach ($value as $key => $valueParameter) {
                             $bindKey = ':' . $key;
                             $bindValue = $valueParameter;
                             $stmt->bindValue($bindKey, $bindValue);
                         }
+                    } else {
+                        $bindKey = ':' . $keyValue;
+                        $bindValue = $value;
+                        $stmt->bindValue($bindKey, $bindValue);
                     }
                 }
             }
 
+
             $stmt->execute();
 
-            $rs = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $rs = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
             return ($rs) ? $rs : [];
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -84,7 +92,6 @@ class DataBase
      * @param string|null $table
      * @param array|null $data
      * @return integer| numero do registro inserido
-     *
      */
     public function insert(string $table = null, array $data = null): int
     {
@@ -114,8 +121,63 @@ class DataBase
         }
     }
 
-    public function update(string $table = null, array $condition = null)
+    public function update(string $table = null, array $data = null, array $where = null)
     {
+        if (!$table) {
+            throw new \Exception("Error: É necessário informar a tabela.", 1);
+            exit;
+        }
+
+        if (!is_array($data)) {
+            throw new \Exception("Error: É necessário informar os dados para serem atualizados.", 1);
+            exit;
+        }
+
+        if (!is_array($where)) {
+            throw new \Exception("Error: É necessário informar as condições para serem atualizados.", 1);
+            exit;
+        }
+
+        try {
+            $dataFieds  = array_keys($data);
+            $dataValues = array_values($data);
+            //$binds      = array_pad([], count($dataValues), '?');
+
+
+            $sql = "UPDATE" . $table;
+
+            /*
+            // Bind Value In SQL String
+            if ($where) {
+                foreach ($where as $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $key => $valueParameter) {
+                            $bindKey = ':' . $key;
+                            $bindValue = $valueParameter;
+                            $stmt->bindValue($bindKey, $bindValue);
+                        }
+                    }
+                }
+            }
+            */
+
+
+            /*
+            // Builder Where
+            foreach ($dataFieds as $key => $value) {
+                foreach ($value as $keyParameter => $parametFilter) {
+                    $sql .= $keyParameter . ' = :' . $keyParameter;
+                }
+            }
+
+            $stmt = $this->con->prepare($sql);
+
+            echo $stmt->queryString;
+            */
+           // $stmt->execute(array_values($data));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 
     public function delete(string $table = null, array $condition = null)
