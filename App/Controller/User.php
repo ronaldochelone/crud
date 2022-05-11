@@ -7,7 +7,7 @@ use App\Models\UserModel;
 class User
 {
     private $userModel;
-    private $requiredFields = ['nome','email','data_nascimento','telefone','cpf','cep'];
+    private $requiredFields = ['nome','email','data_nascimento','telefone','cpf','cep',];
 
     public function __construct()
     {
@@ -99,6 +99,7 @@ class User
         ];
 
         $rs = $this->userModel->delete($where);
+
         return ($rs > 0) ? 'Usuário deletado com Sucesso' : 'Não foi possível remover o usuário';
     }
 }
