@@ -11,7 +11,6 @@ class User
     private $requiredFields = ['nome','email','data_nascimento','telefone','cpf','cep',];
     private $dataRequest = null;
 
-
     public function __construct()
     {
         $this->userModel = new UserModel();
@@ -64,7 +63,6 @@ class User
      */
     public function post(): string
     {
-
         // Variavel de inserção
         $data = $this->dataRequest;
         $data['cep'] = str_replace('-', '', $data['cep']);
@@ -88,6 +86,12 @@ class User
         return  $rs;
     }
 
+    /**
+     * Atualiza as informções do Usuário
+     *
+     * @param integer|null $id
+     * @return string
+     */
     public function put(int $id = null): string
     {
         // Variavel de Atualização
@@ -125,6 +129,12 @@ class User
         return  'Não foi possível atualizar o usuário';
     }
 
+    /**
+     * Remove o Usuário
+     *
+     * @param integer|null $id
+     * @return string
+     */
     public function delete(int $id = null): string
     {
 
@@ -150,6 +160,12 @@ class User
         return ($rs > 0) ? 'Usuário deletado com Sucesso' : 'Não foi possível remover o usuário';
     }
 
+    /**
+     * Função que insere ou Atualiza endereço do usuário
+     *
+     * @param string|null $cep
+     * @return void
+     */
     private function insertUpdateAddress(string $cep = null)
     {
         $cep = str_replace('-', '', $cep);
