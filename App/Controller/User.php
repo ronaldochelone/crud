@@ -9,10 +9,19 @@ class User
 {
     private $userModel;
     private $requiredFields = ['nome','email','data_nascimento','telefone','cpf','cep',];
+    private $dataRequest = null;
+
 
     public function __construct()
     {
         $this->userModel = new UserModel();
+
+         // Verifica o modelo de entrada de dados
+        if (!empty(file_get_contents("php://input"))) {
+            $this->dataRequest =  json_decode(file_get_contents("php://input"), true);
+        } else {
+            $this->dataRequest = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
+        }
     }
 
     /**
@@ -56,15 +65,13 @@ class User
     public function post(): string
     {
 
-        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
-
         // Variavel de inserção
-        $data = $_POST;
+        $data = $this->dataRequest;
         $data['cep'] = str_replace('-', '', $data['cep']);
 
         // Verifica se os campos requiridos estão present.
         foreach ($this->requiredFields as $key => $value) {
-            if (!isset($_POST[$value]) || empty($_POST[$value])) {
+            if (!isset($data[$value]) || empty($data[$value])) {
                 throw new \Exception("Error: É necessário enviar os todos dados para inserir o usuário", 1);
             }
         }
@@ -84,7 +91,8 @@ class User
     public function put(int $id = null): string
     {
         // Variavel de Atualização
-        $data = $_POST;
+        $data = $this->dataRequest;
+
         $data['cep'] = str_replace('-', '', $data['cep']);
 
         if ($id == null) {

@@ -36,19 +36,15 @@
         
         const DBDRIVE = 'mysql';
         const DBHOST = 'localhost';
-        const DBNAME = 'crud';
-        const DBUSER = 'root';
+        const DBNAME = '';
+        const DBUSER = '';
         const DBPASS = '';
+        const HTTP_TOKEN = '';
 
 Acessar o programa pela url do navegador: 
 
 [http://localhost/user](http://localhost:8000/user)
 
-
-<h3 style="color:#393c3f"> Cadastro de usuário </h3>
-
-- O cadastro será um formulário HTML estilizado com [bootstrap](https://getbootstrap.com/) 
-onde iremos enviar -lo a  API
 
 <h3 style="color:#393c3f"> Comunicação </h3>
 
@@ -66,17 +62,19 @@ onde iremos enviar -lo a  API
 - nome       ***( nome )***
 - email      ***( email )***
 - Data de Aniversário   ***( data_nascimento )***
+- Cpf      ***( cpf )***
 - Telefone      ***( telefone )***
+- Cep      ***( cep )***
 - Data do cadastro  ***( created_at )***
 - Data da atualização  ***( updated_at )***
 
-<h4 style="color:#393c3f"> Tabela - Addresses</h4>
+<h4 style="color:#393c3f"> Tabela - Address</h4>
 
 - logradouro      ***( logradouro )***
 - Bairro    ***( bairro )***
 - estado      ***( estado )***
 - cidade        ***( cidade )***
-- CEP   ***( CEP )***
+- Cep   ***( cep )***
 - Data do cadastro  ***( created_at )***
 - Data da atualização  ***( updated_at )***
 
@@ -88,7 +86,7 @@ onde iremos enviar -lo a  API
  [x] Desenvolvolver o Método POST
  [x] Desenvolvolver o Método PUT
  [X] Desenvolvolver o Método DELETE
- [] Criar autenticação via Token
+ [x] Criar autenticação via Token
  [] Criar Testes 
 
  <h4 style="color:#393c3f">Formulário</h4>

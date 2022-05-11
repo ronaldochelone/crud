@@ -17,19 +17,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-
-
 require_once('../vendor/autoload.php');
 
-
 // Verificação Basica de Token da API
+if (! isset($_SERVER['HTTP_TOKEN'])) {
+    echo json_encode(['status' => false,'data' => 'Token de Autorização inválido'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 
 if ($_SERVER['HTTP_TOKEN'] !== HTTP_TOKEN) {
     echo json_encode(['status' => false,'data' => 'Token de Autorização inválido'], JSON_UNESCAPED_UNICODE);
                 exit;
 }
-
-
 
 $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_SPECIAL_CHARS);
 
