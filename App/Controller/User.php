@@ -98,6 +98,8 @@ class User
         $data = $this->dataRequest;
 
         $data['cep'] = str_replace('-', '', $data['cep']);
+        $data['updated_at'] = date('Y-m-d H:i:s');
+
 
         if ($id == null) {
             throw new \Exception("Error: É necessário o id do usuário a ser atualizado", 1);
@@ -187,7 +189,7 @@ class User
             $result['cep'] = $newCep;
             $result['cidade'] = utf8_decode($result['localidade']);
             $result['estado'] = utf8_decode($result['uf']);
-
+            $result['updated_at'] = date('Y-m-d H:i:s');
             // Remover itens não necessários
             unset($result['ibge']);
             unset($result['gia']);
