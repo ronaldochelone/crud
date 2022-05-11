@@ -72,14 +72,11 @@ onde iremos enviar -lo a  API
 
 <h4 style="color:#393c3f"> Tabela - Addresses</h4>
 
-- rua      ***( rua )***
-- número      ***( numero )***
+- logradouro      ***( logradouro )***
 - Bairro    ***( bairro )***
-- Complemento  ***( complemento )***
 - estado      ***( estado )***
 - cidade        ***( cidade )***
 - CEP   ***( CEP )***
-- pais`    ***( País )***
 - Data do cadastro  ***( created_at )***
 - Data da atualização  ***( updated_at )***
 
@@ -90,7 +87,7 @@ onde iremos enviar -lo a  API
  [x] Desenvolvolver o Método GET
  [x] Desenvolvolver o Método POST
  [x] Desenvolvolver o Método PUT
- [] Desenvolvolver o Método DELETE
+ [X] Desenvolvolver o Método DELETE
  [] Criar autenticação via Token
  [] Criar Testes 
 

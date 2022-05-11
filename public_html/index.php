@@ -16,9 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     }
     exit(0);
 }
-
-
-
 require_once('../vendor/autoload.php');
 
 $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_SPECIAL_CHARS);

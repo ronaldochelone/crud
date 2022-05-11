@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Models\UserModel;
+use App\Models\AddressModel;
 
 class User
 {
@@ -22,14 +23,29 @@ class User
      */
     public function get($id = null): array
     {
+        $addressModel = new AddressModel();
+
         $fields = null;
 
+        // É possível passar mais de um parâmetro para a pesquisar os registros.
         $where = ($id != null) ? [
                                     ['id' => $id]
                                 ] : null;
 
+
+        // Retorna a lista de usuários
+        $userList = $this->userModel->get($fields, $where);
+
+        // Pesquisa Endereço na Tabela de Endereços Pelo Cep
+        foreach ($userList as $key => $value) {
+            $r = $addressModel->get(null, ['cep' => $value['cep']]);
+            if ($r) {
+                $userList[$key]['address'] = ($r[0]) ? $r[0] : null;
+            }
+        }
+
         http_response_code(200);
-        return $this->userModel->get($fields, $where);
+        return $userList;
     }
 
     /**
@@ -42,6 +58,10 @@ class User
 
         $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_ADD_SLASHES);
 
+        // Variavel de inserção
+        $data = $_POST;
+        $data['cep'] = str_replace('-', '', $data['cep']);
+
         // Verifica se os campos requiridos estão present.
         foreach ($this->requiredFields as $key => $value) {
             if (!isset($_POST[$value]) || empty($_POST[$value])) {
@@ -49,13 +69,23 @@ class User
             }
         }
 
-        $rs = $this->userModel->insert($_POST);
+        $rs = $this->userModel->insert($data);
 
-        return ($rs > 0) ? 'Usuário inserido com Sucesso' : $rs;
+        if ($rs > 0) {
+            $cep =  $data['cep'];
+
+            $rs = $this->insertUpdateAddress($cep);
+            return ($rs > 0) ? 'Usuário inserido com Sucesso' : $rs;
+        }
+
+        return  $rs;
     }
 
-    public function put($id = null): string
+    public function put(int $id = null): string
     {
+        // Variavel de Atualização
+        $data = $_POST;
+        $data['cep'] = str_replace('-', '', $data['cep']);
 
         if ($id == null) {
             throw new \Exception("Error: É necessário o id do usuário a ser atualizado", 1);
@@ -74,11 +104,20 @@ class User
             //['nome' => 'fulano']
         ];
 
-        $rs = $this->userModel->update($_POST, $where);
-        return ($rs > 0) ? 'Usuário atualizado com Sucesso' : 'Não foi possível atualizar o usuário';
+        $rs = $this->userModel->update($data, $where);
+
+        if ($rs > 0) {
+            $cep =  $data['cep'];
+
+            $rs = $this->insertUpdateAddress($cep);
+
+            return ($rs > 0) ? 'Usuário atualizado com Sucesso'  : $rs;
+        }
+
+        return  'Não foi possível atualizar o usuário';
     }
 
-    public function delete($id = null): string
+    public function delete(int $id = null): string
     {
 
         if ($id == null) {
@@ -101,5 +140,45 @@ class User
         $rs = $this->userModel->delete($where);
 
         return ($rs > 0) ? 'Usuário deletado com Sucesso' : 'Não foi possível remover o usuário';
+    }
+
+    private function insertUpdateAddress(string $cep = null)
+    {
+        $cep = str_replace('-', '', $cep);
+
+        $addressModel = new AddressModel();
+
+        try {
+            $result = json_decode($addressModel->getAddressByIntegrationViaZipCode($cep), true);
+
+            if (isset($result['erro'])) {
+                throw new \Exception("Error: Não foi possível localizar o endereço", 1);
+            }
+
+            //Parse de Variáveis
+            $newCep = str_replace('-', '', $result['cep']);
+
+            $where = ['cep' => $newCep];
+
+            $result['cep'] = $newCep;
+            $result['cidade'] = utf8_decode($result['localidade']);
+            $result['estado'] = utf8_decode($result['uf']);
+
+            // Remover itens não necessários
+            unset($result['ibge']);
+            unset($result['gia']);
+            unset($result['ddd']);
+            unset($result['siafi']);
+            unset($result['localidade']);
+            unset($result['complemento']);
+            unset($result['uf']);
+
+            $listAddress =  $addressModel->get(null, $where);
+
+            // Verifica se existe o Endereço
+            return (!$listAddress) ? $addressModel->insert($result) : $addressModel->update($result, $where);
+        } catch (\Throwable $th) {
+            throw new \Exception("Error: Não foi possível localizar o endereço", 1);
+        }
     }
 }

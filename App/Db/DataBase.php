@@ -11,7 +11,17 @@ class DataBase
      */
     public function __construct()
     {
-        $this->con = new \PDO(DBDRIVE . ':' . 'host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
+
+
+        $this->con = new \PDO(
+            DBDRIVE . ':' . 'host=' . DBHOST . ';dbname=' . DBNAME,
+            DBUSER,
+            DBPASS,
+            [
+            \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+            ]
+        );
+        $this->con->exec("set names utf8_general_ci");
     }
 
     /**
@@ -24,6 +34,7 @@ class DataBase
      */
     public function get(string $table = null, array $fields = null, array $where = null): array
     {
+
         if (!$table) {
             throw new \Exception("Error: É necessário informar a tabela.", 1);
             exit;
@@ -54,8 +65,8 @@ class DataBase
                 }
             }
 
-            $stmt = $this->con->prepare($sql);
 
+            $stmt = $this->con->prepare($sql);
 
             // Bind Value In SQL String
             if ($where) {
@@ -76,9 +87,7 @@ class DataBase
 
             $stmt->execute();
 
-            $rs = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            return ($rs) ? $rs : [];
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -111,7 +120,6 @@ class DataBase
             $sql = "INSERT INTO " . $table . " ( " . implode(',', $dataFieds) . " ) " . " VALUES ( " . implode(',', $binds) . " )";
 
             $stmt = $this->con->prepare($sql);
-
             $stmt->execute(array_values($data));
             return $this->con->lastInsertId();
         } catch (\Exception $e) {
