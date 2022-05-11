@@ -17,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
+date_default_timezone_set('America/Sao_Paulo');
+
+
 require_once('../vendor/autoload.php');
 
 // Verificação Basica de Token da API
